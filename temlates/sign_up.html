@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="container">
+
+      <div class="jumbotron bg-transparent">
+        <h1>Sign up</h1>
+        <form method="post">
+            <div class="form-signin">
+         <label for="name" class="sr-only">Name</label>
+        <input type="name" name="name" id="name" class="form-control" placeholder="Name" required autofocus>
+         <label for="nikname" class="sr-only">Nickname</label>
+        <input type="nikname" name="nikname" id="nikname" class="form-control" placeholder="Nickname" required autofocus>
+         <label for="pass" class="sr-only">Password</label>
+        <input type="password" name="pass" id="pass" class="form-control" placeholder="Password" required>
+          <label for="con_pass" class="sr-only">Password confirmation</label>
+        <input type="password" name="con_pass" id="con_pass" class="form-control" placeholder="Password confirmation" required>
+        <button id="btnSignUp" class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
+              <h1></h1>
+              <a href="/login"><button  id="login" class="btn btn-success  btn-sm"  style="font-size:16px;" type="button">Log in</button></a>
+      </form>
+      </div>
+    </div>>
+
+
+
+      <footer class="footer">
+        <p>&copy;invalid team</p>
+      </footer>
+
+{% endblock %}
+
