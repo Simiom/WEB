@@ -1,9 +1,10 @@
 from add_news import AddNewsForm
 from db import DB
-from flask import Flask, redirect, render_template, session
+from flask import Flask, redirect, render_template, session, request
 from login_form import LoginForm
-from NewsDB import NewsModel
+from news_model import NewsModel
 from users_model import UsersModel
+from werkzeug.security import generate_password_hash
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -13,34 +14,31 @@ UsersModel(db.get_connection()).init_table()
 
 
 # http://127.0.0.1:8080/login
-
-def add_rank(news_id):
-    nm = NewsModel(db.get_connection())
-    nm.delete(news_id)
-
-
-def lol():
-    print(11111)
-
+@app.route('/SingUp', methods = ["GET", "POST"])
+def sign_up():
+    if request.method == "GET":
+        return render_template('sign_up.html', title='Авторизация')
+    elif request.method == "POST":
+        user_model = UsersModel(db.get_connection())
+        print(request.form['nicame'], request.form['name'], request.form['pass'])
+        user_model.insert(request.form['nicame'], request.form['name'], request.form['pass'])
+        session['username'] = request.form['name']
+        session['user_id'] = request.form['nicame']
+        return redirect("/index")
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        user_name = "admin"
-        password = "admin"
+    if request.method == "GET":
+        return render_template('login.html', title='Авторизация')
+    elif request.method == "POST":
         user_model = UsersModel(db.get_connection())
-        exists = user_model.exists(user_name, password)
+        exists = user_model.exists(request.form['nicname'], request.form['pass'])
         if (exists[0]):
-            session['username'] = user_name
-            session['user_id'] = exists[1]
+            session['username'] = exists[1]
+            session['user_id'] = request.form['nicname']
         return redirect("/index")
-    return render_template('Logingod.html', title='Авторизация', form=form, lol=lol)
+    return render_template('sign_up.html', title='Авторизация')
 
-
-@app.route('/signup')
-def signup():
-    return render_template('Evgenlog.html', title='Авторизация')
 
 
 @app.route('/logout')
@@ -66,10 +64,9 @@ def add_news():
     form = AddNewsForm()
     if form.validate_on_submit():
         title = form.title.data
-        picture = form.picture.data
         content = form.content.data
         nm = NewsModel(db.get_connection())
-        nm.insert(title, picture, content, session['user_id'])
+        nm.insert(title, content, session['user_id'])
         return redirect("/index")
     return render_template('add_news.html', title='Добавление новости', form=form, username=session['username'])
 
@@ -83,5 +80,8 @@ def delete_news(news_id):
     return redirect("/index")
 
 
+
 if __name__ == '__main__':
+    um = NewsModel(db.get_connection())
+    print(um.get_all())
     app.run(port=8080, host='127.0.0.1', debug=True)
