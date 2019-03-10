@@ -19,6 +19,10 @@ def add_rank(news_id):
     nm.delete(news_id)
 
 
+def lol():
+    print(11111)
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -31,12 +35,11 @@ def login():
             session['username'] = user_name
             session['user_id'] = exists[1]
         return redirect("/index")
-    return render_template('login.html', title='Авторизация', form=form)
+    return render_template('Logingod.html', title='Авторизация', lol=lol)
 
 
-@app.route('/signup', methods=['GET', 'POST'])
+@app.route('/signup')
 def signup():
-
     return render_template('Evgenlog.html', title='Авторизация')
 
 
