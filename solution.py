@@ -27,15 +27,15 @@ def lol():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        user_name = form.username.data
-        password = form.password.data
+        user_name = "admin"
+        password = "admin"
         user_model = UsersModel(db.get_connection())
         exists = user_model.exists(user_name, password)
         if (exists[0]):
             session['username'] = user_name
             session['user_id'] = exists[1]
         return redirect("/index")
-    return render_template('Logingod.html', title='Авторизация', lol=lol)
+    return render_template('Logingod.html', title='Авторизация', form=form, lol=lol)
 
 
 @app.route('/signup')
