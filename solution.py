@@ -14,17 +14,19 @@ UsersModel(db.get_connection()).init_table()
 
 
 # http://127.0.0.1:8080/login
-@app.route('/SingUp', methods = ["GET", "POST"])
+@app.route('/SignUp', methods = ["GET", "POST"])
 def sign_up():
     if request.method == "GET":
-        return render_template('sign_up.html', title='Авторизация')
+        return render_template('sign_up.html', title='Авторизация', error = None)
     elif request.method == "POST":
         user_model = UsersModel(db.get_connection())
-        print(request.form['nicame'], request.form['name'], request.form['pass'])
-        user_model.insert(request.form['nicame'], request.form['name'], request.form['pass'])
-        session['username'] = request.form['name']
-        session['user_id'] = request.form['nicame']
-        return redirect("/index")
+        if not user_model.get(request.form['nikname']):
+            user_model.insert(request.form['nikname'], request.form['name'], request.form['pass'])
+            session['username'] = request.form['name']
+            session['user_id'] = request.form['nikname']
+            return redirect("/index")
+        else:
+            return render_template('sign_up.html', title='Авторизация', error = "this nikname already exists")
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -32,10 +34,10 @@ def login():
         return render_template('login.html', title='Авторизация')
     elif request.method == "POST":
         user_model = UsersModel(db.get_connection())
-        exists = user_model.exists(request.form['nicname'], request.form['pass'])
+        exists = user_model.exists(request.form['nikname'], request.form['pass'])
         if (exists[0]):
             session['username'] = exists[1]
-            session['user_id'] = request.form['nicname']
+            session['user_id'] = request.form['nikname']
         return redirect("/index")
     return render_template('sign_up.html', title='Авторизация')
 
