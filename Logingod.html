@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="container">
+
+      <div class="jumbotron">
+        <h1>Login</h1>
+        <form class="form-signin">
+
+         <label for="form.username" class="sr-only">Nickname</label>
+        <input type="nickname" name="inputNickname" id="form.username" class="form-control" placeholder="Nickname" required autofocus>
+
+         <label for="form.password" class="sr-only">Password</label>
+        <input type="password" name="inputPassword" id="form.password" class="form-control" placeholder="Password" required>
+
+       <button  id="btnSignUp" class="btn btn-lg btn-primary btn-block" type="button">login</button>
+
+
+
+          <nav class="navbar navbar-light light">
+                <a class="nav-item nav-link" href="SingIn">Sign in</a>
+            </nav>
+      </form>
+      </div>
+        </div>
+{% endblock %}
