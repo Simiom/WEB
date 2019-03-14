@@ -1,46 +1,50 @@
-from add_news import AddNewsForm
-from db import DB
 from flask import Flask, redirect, render_template, session, request
-from login_form import LoginForm
+
+from db import DB
 from news_model import NewsModel
 from users_model import UsersModel
-from werkzeug.security import generate_password_hash
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 db = DB()
 NewsModel(db.get_connection()).init_table()
 UsersModel(db.get_connection()).init_table()
+try:
+    users_img = NewsModel(db.get_connection()).get_all()[-1][0]
+except:
+    users_img = 0
 
 
 # http://127.0.0.1:8080/login
-@app.route('/SignUp', methods = ["GET", "POST"])
+@app.route('/SignUp', methods=["GET", "POST"])
 def sign_up():
     if request.method == "GET":
-        return render_template('sign_up.html', title='Авторизация', error = None)
+        return render_template('sign_up.html', title='Авторизация', error=None)
     elif request.method == "POST":
         user_model = UsersModel(db.get_connection())
         if not user_model.get(request.form['nikname']):
             user_model.insert(request.form['nikname'], request.form['name'], request.form['pass'])
             session['username'] = request.form['name']
             session['user_id'] = request.form['nikname']
-            return redirect("/index")
+            return redirect("/main")
         else:
-            return render_template('sign_up.html', title='Авторизация', error = "this nikname already exists")
+            return render_template('sign_up.html', title='Авторизация', error="this nikname already exists")
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if "username" in session:
+        return redirect("/main")
     if request.method == "GET":
-        return render_template('login.html', title='Авторизация')
+        return render_template('login.html')
     elif request.method == "POST":
         user_model = UsersModel(db.get_connection())
         exists = user_model.exists(request.form['nikname'], request.form['pass'])
         if (exists[0]):
             session['username'] = exists[1]
             session['user_id'] = request.form['nikname']
-        return redirect("/index")
-    return render_template('sign_up.html', title='Авторизация')
-
+        return redirect("/main")
+    return redirect("/SignUp")
 
 
 @app.route('/logout')
@@ -51,26 +55,36 @@ def logout():
 
 
 @app.route('/')
-@app.route('/index')
-def index():
+@app.route('/main')
+def main():
     if 'username' not in session:
         return redirect('/login')
-    news = NewsModel(db.get_connection()).get_all(session['user_id'])
-    return render_template('index.html', username=session['username'], news=news)
+    news = reversed(NewsModel(db.get_connection()).get_all())
+    return render_template('main.html', username=session['username'],session=session, news=news, like = like)
 
 
 @app.route('/add_news', methods=['GET', 'POST'])
 def add_news():
+    global users_img
     if 'username' not in session:
         return redirect('/login')
-    form = AddNewsForm()
-    if form.validate_on_submit():
-        title = form.title.data
-        content = form.content.data
+    if request.method == "GET":
+        return render_template('add_news.html', title='Добавление новости', username=session['username'])
+    elif request.method == "POST":
         nm = NewsModel(db.get_connection())
-        nm.insert(title, content, session['user_id'])
-        return redirect("/index")
-    return render_template('add_news.html', title='Добавление новости', form=form, username=session['username'])
+        request.files["file"].save("static/img/users_img/{}.png".format(users_img))
+        recipe = request.form["recipe"]
+
+        nm.insert(request.form["name"], users_img, recipe, session["user_id"])
+        users_img += 1
+        return redirect('/')
+
+
+@app.route('/user/<user_id>')
+def user(user_id):
+    news = reversed(NewsModel(db.get_connection()).get_all(user_id))
+    username = UsersModel(db.get_connection()).get(user_id)[1]
+    return render_template('user.html', username=username,session=session, news=news, like=like)
 
 
 @app.route('/delete_news/<int:news_id>', methods=['GET'])
@@ -78,12 +92,15 @@ def delete_news(news_id):
     if 'username' not in session:
         return redirect('/login')
     nm = NewsModel(db.get_connection())
-    nm.delete(news_id)
-    return redirect("/index")
+    if nm.get(news_id)[4] == session['user_id']:
+        nm.delete(news_id)
+    return redirect("/main")
 
+
+def like(news_id, val):
+    nm = NewsModel(db.get_connection())
+    nm.update_rating(news_id, val)
 
 
 if __name__ == '__main__':
-    um = NewsModel(db.get_connection())
-    print(um.get_all())
     app.run(port=8080, host='127.0.0.1', debug=True)
