@@ -11,12 +11,21 @@
 
 
 </head>
-  <body background="https://st.depositphotos.com/1172692/4405/v/950/depositphotos_44059289-stock-illustration-seamless-vector-pattern-or-texture.jpg" >
-      <nav class="navbar navbar-light transparent">
-        {% if "username" in session %}
-            <a class="navbar-brand" href="/logout">{{session['username']}}</a>
-        {% endif %}
+  <body background="..\static\img\bg.jpg" >
+  <nav class="navbar navbar-dark" style="background-color: #DEB887;height:100px;margin-top:-50px">
+      {% if "username" in session %}
+       <a class="navbar-brand" href=/user/{{session['user_id']}} style="font-size:30px; padding-bottom:15px">{{session['username']}}</a>
+      <a href="/main"> <img src="..\static\img\osnovacan.png" height="100" style="padding-bottom:15px"></a>
+       <a href="/add_news"><img src="..\static\img\cake.png" height="100" style="padding-bottom:15px"> </a>
+      {% endif %}
+      {% if not "username" in session %}
+        <a href="/login"> <img src="..\static\img\osnovacan.png" height="100" style="padding-bottom:15px"></a>
+      {% endif %}
       </nav>
+  {% if "username" in session %}
+  <a class="dropdown-item bg-transparent" href="/logout" style="font-size:20px"><button style="text-align: left; background: #DEB887; border: #DEB887" class="btn btn-lg btn-primary">Выйти</button></a>
+  {% endif %}
+
 
     <!-- Begin page content -->
     <main role="main" class="container">

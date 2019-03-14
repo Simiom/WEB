@@ -1,36 +1,25 @@
 {% extends "base.html" %}
- 
-{% block content %}
-    <h1>Добавление новости</h1>
-    <form action="" method="post" novalidate>
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.title.label }}<br>
-            {{ form.title }}<br>
-            {% for error in form.title.errors %}
-                <div class="alert alert-danger" role="alert">
-                    {{ error }}
+
+    {% block content %}
+
+
+        <div class="container">
+          <div class="jumbotron bg-transparent" style="height:1020px;padding-top:305px;background-image:url(http://www.pngpix.com/wp-content/uploads/2016/05/PNGPIX-COM-Birthday-Cake-PNG-image.png); background-size: 100%; margin-top: -12%">
+            <h1 style="color:lightblue">Добавить новость</h1>
+            <form method="post", enctype="multipart/form-data">
+                <div class="form-signin">
+             <label for="name" class="sr-only">Название Рецепта</label>
+            <input type="name" name="name" id="name" class="form-control" placeholder="Название Рецепта" required autofocus>
+                    <label for="file" style="font-size:20px">Фотография</label>
+                    <input type="file" class="form-control-file" id="file" name="file">
+             <label for="recipe" class="sr-only">Password</label>
+            <input type="text" name="recipe" id="recipe" class="form-control" placeholder="Рецепт" required>
+            <button id="btnSignUp" class="btn btn-lg btn-primary btn-block" type="submit">Опубликовать</button>
+                  <h1></h1>
+                  <a href="/main"><button  id="login" class="btn btn-success  btn-sm"  style="font-size:16px;" type="button">выход</button></a>
                 </div>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.picture.label }}<br>
-            {{ form.picture }}<br>
-            {% for error in form.picture.errors %}
-                <div class="alert alert-danger" role="alert">
-                    {{ error }}
-                </div>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.content.label }}<br>
-            {{ form.content }}<br>
-            {% for error in form.content.errors %}
-                <div class="alert alert-danger" role="alert">
-                    {{ error }}
-                </div>
-            {% endfor %}
-        </p>
-        <p>{{ form.submit() }}</p>
-    </form>
-{% endblock %}
+          </form>
+        </div>
+        </div>>
+
+    {% endblock %}

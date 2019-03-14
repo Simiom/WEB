@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+   .col {
+    padding: 10px; /* Поля */
+    font-size: 1.5em; /* Размер шрифта */
+    word-wrap: normal; /* Перенос слов */
+    text-align: center;
+    padding-bottom: 20px;
+   }
+
+</style>
+
+{% for item in news %}
+<div style = "padding-bottom: 25px;">
+<div class="jambotron col" style="background-color: #DEB887; border-color: #CD853F;">
+    <div class="alert alert-dark" role="alert"  style="background-color: #CD853F; border-color: #CD853F;">
+        <h2>{{item[1]}}</h2>
+    </div>
+    <div style="overflow: hidden; width: 1070px;  height: 400px;"><img src="..\static\img\users_img\{{item[2]}}.png">
+    </div>
+    {{item[3]}}
+    <p style="text-align: right"> {{item[5]}} <a>
+        <button onclick="{{like(item[0], 1)}}"><img src="../static/img/like.png"
+                     alt="Like"
+                     style="vertical-align: middle"></button>
+    </a>
+        <button onclick="{{like(item[0], 1)}}"><img src="../static/img/dislike.png"
+                                                    alt="Dislike"
+                                                    style="vertical-align: middle"></button>
+    </p>
+
+{% if session["user_id"] == item[4] %}
+    <a href="/delete_news/{{item[0]}}">Удалить новость</a>
+{% endif %}
+    {% if not session["user_id"] == item[4] %}
+    <a href="/user/{{item[4]}}">{{item[4]}}</a>
+        {% endif %}
+
+</div>
+</div>
+<p></p>
+
+
+
+{% endfor %}
+{% endblock %}
+
+
+

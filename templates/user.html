@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+
+   .col {
+    padding: 10px; /* Поля */
+    font-size: 1.5em; /* Размер шрифта */
+    word-wrap: normal; /* Перенос слов */
+    text-align: center;
+    padding-bottom: 20px;
+   }
+   .box2 {
+    background: #fc0; /* Цвет фона /
+    width: 300px; /* Ширина блока */
+
+    -moz-box-sizing: border-box; / Для Firefox /
+    box-sizing: content-box; / Ширина блока с полями */
+   }
+
+
+</style>
+<div style ='background: #eab77d; box-sizing: padding-box;'>
+    {% if not session["username"] == username %}
+    <h1 style="text-align: center; font-size:100px;">{{username}}</h1>
+    {% endif %}
+
+    <h2 style ='text-align: center;'>Рецепты:</h2>
+</div>
+<div style = "padding-bottom: 25px;">
+{% for item in news %}
+<div class="jumbotron col" style="background-color: #DEB887; border-color: #CD853F;">
+    <div class="alert alert-dark" role="alert"  style="background-color: #CD853F; border-color: #CD853F;">
+        <h2>{{item[1]}}</h2>
+    </div>
+    <div style="overflow: hidden; width: 1070px;  height: 400px;"><img src="..\static\img\users_img\{{item[2]}}.png">
+    </div>
+    {{item[3]}}
+    <p style="text-align: right"> {{item[5]}} <a>
+        <button onclick="{{like(item[0], 1)}}"><img src="../static/img/like.png"
+                     alt="Like"
+                     style="vertical-align: middle"></button>
+    </a>
+        <button onclick="{{like(item[0], 1)}}"><img src="../static/img/dislike.png"
+                                                    alt="Dislike"
+                                                    style="vertical-align: middle"></button>
+    </p>
+{% if session["user_id"] == item[4] %}
+    <a href="/delete_news/{{item[0]}}">Удалить новость</a>
+{% endif %}
+</div>
+</div>
+{% endfor %}
+{% endblock %}
+
+
+
