@@ -3,6 +3,10 @@ body {
   padding-top: 20px;
   padding-bottom: 20px;
 }
+div {
+    word-wrap: break-word; /* Перенос слов */
+
+}
 
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
@@ -51,6 +55,7 @@ body {
 .jumbotron .btn {
   padding: 14px 24px;
   font-size: 21px;
+  word-wrap: break-word; /* Перенос слов */
 }
 
 /* Supporting marketing content */
