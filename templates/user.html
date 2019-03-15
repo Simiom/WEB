@@ -35,7 +35,9 @@
     </div>
     <div style="overflow: hidden; width: 1070px;  height: 400px;"><img src="..\static\img\users_img\{{item[2]}}.png">
     </div>
-    {{item[3]}}
+    {% for line in item[3] %}
+    {{line}}<br>
+    {% endfor %}
     <p style="text-align: right"> {{item[5]}} <a>
         <button onclick="{{like(item[0], 1)}}"><img src="../static/img/like.png"
                      alt="Like"

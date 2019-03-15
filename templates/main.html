@@ -4,7 +4,7 @@
 <style>
    .col {
     padding: 10px; /* Поля */
-    font-size: 1.5em; /* Размер шрифта */
+    font-size: 20px; /* Размер шрифта */
     word-wrap: normal; /* Перенос слов */
     text-align: center;
     padding-bottom: 20px;
@@ -18,15 +18,17 @@
     <div class="alert alert-dark" role="alert"  style="background-color: #CD853F; border-color: #CD853F;">
         <h2>{{item[1]}}</h2>
     </div>
-    <div style="overflow: hidden; width: 1070px;  height: 400px;"><img src="..\static\img\users_img\{{item[2]}}.png">
+    <div style="overflow: hidden; width: 1070px;  "><img src="..\static\img\users_img\{{item[2]}}.png">
     </div>
-    {{item[3]}}
+    {% for line in item[3] %}
+    {{line}}<br>
+    {% endfor %}
     <p style="text-align: right"> {{item[5]}} <a>
-        <button onclick="{{like(item[0], 1)}}"><img src="../static/img/like.png"
+        <button id="like"><img src="../static/img/like.png"
                      alt="Like"
                      style="vertical-align: middle"></button>
     </a>
-        <button onclick="{{like(item[0], 1)}}"><img src="../static/img/dislike.png"
+        <button id="dislike"><img src="../static/img/dislike.png"
                                                     alt="Dislike"
                                                     style="vertical-align: middle"></button>
     </p>
